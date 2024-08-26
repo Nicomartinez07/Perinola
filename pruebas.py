@@ -19,6 +19,7 @@ print(esVerda)
 """
 
 #Apuestas----------------------------------------
+"""
 
 a = Apuesta()
 
@@ -34,3 +35,6 @@ print(a)
 a.ponerFicha(6)
 resultado = a.estaVacia()
 print(resultado)
+
+"""
+

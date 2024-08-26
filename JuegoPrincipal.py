@@ -32,11 +32,6 @@ def sacarPerdedores():
         n = nombres.pop(i)
         print(f"Perdió {n}")
 
-def pasarTurno():
-  f = fichas.pop(0)
-  fichas.append(f)
-  n = nombres.pop(0)
-  nombres.append(n)
 
 def quedaUnSoloJugador():
   return len(fichas) == 1
