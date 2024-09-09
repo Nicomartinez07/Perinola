@@ -1,24 +1,27 @@
 class Apuesta: 
     def __init__(self):
-        self.cantfichas = 0
+        self.fichas = 0
     def __repr__(self):
-      return f"Apuesta: {self.cantfichas} fichas"
+      return f"Apuesta: {self.fichas} fichas"
     def ponerFicha(self, fichas=1):
-      self.cantfichas = self.cantfichas + fichas
+      self.fichas = self.fichas + fichas
     def tomarFicha(self, fichas=1):
-      if (self.cantfichas < fichas):
+      if (self.fichas < fichas):
             raise ValueError("El numero de fichas no puede ser negativo")
-      self.cantfichas -= fichas
+      self.fichas -= fichas
     def tomarTodas(self):
-      self.cantfichas = 0
-      return self.cantfichas
+      nF = self.fichas
+      self.fichas = 0
+      return nF
     def tieneFicha(self, fichas=1):
-      if (self.cantfichas >= fichas):
+      if (self.fichas >= fichas):
         return True
       else:
         return False
     def estaVacia(self):
-      if (self.cantfichas == 0):
+      if (self.fichas == 0):
         return True
       else:
         return False
+      
+  
