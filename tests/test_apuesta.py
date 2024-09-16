@@ -1,4 +1,3 @@
-
 import pytest
 from classes.apuesta import Apuesta
 
