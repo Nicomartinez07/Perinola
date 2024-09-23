@@ -1,90 +1,81 @@
-from random import choice
+from classes.apuesta import Apuesta
+from classes.perinola import Perinola
+from classes.jugador import Jugador
+from classes.ronda import Ronda
 
-fichas = [5, 5, 5, 5]
-nombres = ["gonzaa", "nicoo", "javii", "matii"]
-apuesta = 0
+ronda = Ronda()
+nombres = ("j1", "j2", "j3", "j4")
+for n in nombres:
+    j = Jugador(n)
+    ronda.agregarJugador(j)
+apuesta = Apuesta()
+perinola = Perinola()
 
 def ponerTodos():
-    global apuesta
     print("Ponen todos")
-    for i in range(len(fichas)):
-        fichas[i] = fichas[i]-1
-        apuesta = apuesta + 1
-
-def mostrarApuesta():
-    print(f"apuesta: {apuesta}")
-
-def mostrarJugadores():
-    for i in range(len(fichas)):
-        print(f"{nombres[i]}: {fichas[i]}")
-
-def mostrarAQuienLeToca():
-    print(f"Le toca a {nombres[0]}")
-
-def sacarPerdedores():
-    global turno
-    a_sacar = []
-    for i in range(0, len(fichas)):
-        if fichas[i] == 0:
-            a_sacar.append(i)
-    for i in reversed(a_sacar):
-        fichas.pop(i)
-        n = nombres.pop(i)
-        print(f"Perdió {n}")
-
-
-def quedaUnSoloJugador():
-  return len(fichas) == 1
-
-
-## Programa Principal
+    for j in ronda.jugadores:
+        j.sacarFicha()
+        apuesta.ponerFicha()    
 
 ponerTodos()
 
-while not quedaUnSoloJugador():
-    mostrarJugadores()
-    mostrarApuesta()
+while not ronda.quedaUnSoloJugador():
+    print(ronda)
+    print(apuesta)
 
-    if apuesta == 0:
+    if apuesta.estaVacia():
         ponerTodos()
-    sacarPerdedores()
+    ronda.sacarJugadoresSinFichas()
 
-    if quedaUnSoloJugador():
+    if ronda.quedaUnSoloJugador():
+        break
+    elif len(ronda.jugadores) == 0:
         break
 
-    mostrarAQuienLeToca()
-    tiro = Perinola.tirar()
-    print(tiro)
+    jt = ronda.jugadorEnTurno()
+    print("le toca a: ", end="")
+    print(jt)
 
-    if tiro == "Pon 1":# from random import randint
-        fichas[0] = fichas[0] - 1
-        apuesta = apuesta + 1
-    elif tiro == "Pon 2":
-        if fichas[0] < 2:
-            apuesta = apuesta + fichas[0]
-            fichas[0] = 0
+    p = perinola.tirar()
+    print(p)
+
+    if p == "Pon 1":
+        jt.sacarFicha()
+        apuesta.ponerFicha()
+    elif p == "Pon 2":
+        if jt.fichas == 1:
+            jt.sacarFicha()
+            apuesta.ponerFicha()
         else:
-            fichas[0] = fichas[0] - 2
-            apuesta = apuesta + 2
-    elif tiro == "Toma 1":
-        fichas[0] = fichas[0] + 1
-        apuesta = apuesta - 1
-    elif tiro == "Toma 2":
-        if apuesta < 2:
-            fichas[0] = fichas[0] + apuesta
-            apuesta = 0
+            jt.sacarFicha(2)
+            apuesta.ponerFicha(2)
+    elif p == "Toma 1":
+        apuesta.tomarFicha()
+        jt.darFicha()
+    elif p == "Toma 2":
+        if apuesta.fichas == 1:
+            apuesta.tomarFicha()
+            jt.darFicha()
         else:
-            fichas[0] = fichas[0] + 2
-            apuesta = apuesta - 2
-    elif tiro == "Toma Todo":
-        fichas[0] = fichas[0] + apuesta
-        apuesta = 0
-    elif tiro == "Todos Ponen":
+            apuesta.tomarFicha(2)
+            jt.darFicha(2)
+    elif p == "Toma Todo":
+        fichas = apuesta.tomarTodas()
+        jt.darFicha(fichas)
+    elif p == "Todos Ponen":
         ponerTodos()
+    else:
+        raise ValueError("Valor inesperado")
 
-    mostrarJugadores()
-    sacarPerdedores()
-    pasarTurno()
+
+
+    print(apuesta)
+    print(ronda)
+    ronda.sacarJugadoresSinFichas()
+    ronda.pasarTurno()
     print()
 
-print(f"Terminó el juego, ganó: {nombres[0]}")
+if ronda.quedaUnSoloJugador():
+    print(f"Terminó el juego, ganó: {ronda.jugadorEnTurno()}")
+else:
+    print(f"Terminó el juego, perdieron todos")

@@ -1,32 +1,32 @@
-from jugador import Jugador
-
 class Ronda: 
     def __init__(self):
         self.jugadores = []
-        return f"{Jugador.nombre}, {Jugador.fichas} fichas"
+    
+    def __repr__(self):
+        return "\n".join(map(str, self.jugadores))
+
+    def agregarJugador(self, jugador):
+        if jugador.fichas <= 0:
+            raise ValueError("No se puede agregar un jugador sin fichas.")
+        self.jugadores.append(jugador)
     
     def sacarJugadoresSinFichas(self):
         a_sacar = []
         for i in range(0, len(self.jugadores)):
-            if self.jugadores[i] == 0:
+            if self.jugadores[i].sinFichas():
                 a_sacar.append(i)
         for i in reversed(a_sacar):
-            self.jugadores.pop(i)
             n = self.jugadores.pop(i)
             print(f"Perdió {n}")
 
 
     def jugadorEnTurno(self):
-        return(f"Le toca a {self.jugadores[0]}")
+        return self.jugadores[0]
 
     def pasarTurno(self):
-        f = Jugador.fichas.pop(0)
-        Jugador.fichas.append(f)
-        n = Jugador.nombre.nombre.pop(0)
-        Jugador.nombre.append(n)
+        j = self.jugadores.pop(0)
+        self.jugadores.append(j)
 
-    def quedaSoloUnJugador(self):
-        if len(self.jugadores) < 1:
-            return True 
-        else: 
-            return False 
+    def quedaUnSoloJugador(self):
+        return len(self.jugadores) == 1 
+        
